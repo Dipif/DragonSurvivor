@@ -31,13 +31,7 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (GetController() && GetController()->GetPawn())
-	{
-		FVector Direction = (DestinationLocation - GetActorLocation()).GetSafeNormal();
-		Direction.Z = 0; // Ensure movement is horizontal
-		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
-		AddMovementInput(Direction, 1.0f);
-	}
+	MoveTo(DestinationLocation); // Move towards the destination location
 }
 
 // Called to bind functionality to input
@@ -47,8 +41,20 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+void ACharacterBase::UpdateDestination(const FVector& NewDestination)
+{
+	DestinationLocation = NewDestination;
+}
+
+
 void ACharacterBase::MoveTo(const FVector& Destination)
 {
-	DestinationLocation = Destination;
+	if (GetController() && GetController()->GetPawn())
+	{
+		FVector Direction = (DestinationLocation - GetActorLocation()).GetSafeNormal();
+		Direction.Z = 0; // Ensure movement is horizontal
+		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
+		AddMovementInput(Direction, 1.0f);
+	}
 }
 

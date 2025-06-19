@@ -14,6 +14,11 @@ class PROJECT1_API ACharacterBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ACharacterBase();
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,13 +39,8 @@ protected:
 	class UCameraComponent* CameraComponent;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void MoveTo(const FVector& Destination);
+	virtual void UpdateDestination(const FVector& Destination);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+private:
+	void MoveTo(const FVector& Destination);
 };
