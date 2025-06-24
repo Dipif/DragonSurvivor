@@ -7,12 +7,13 @@
 #include "DataAsset_InputConfig.h"
 #include "Blueprint/UserWidget.h"
 
+
 ADragonPlayerController::ADragonPlayerController(const FObjectInitializer& ObjectInitializer)
 {
+	InputConfigDataAsset = nullptr;
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 	CurrentMouseCursor = EMouseCursor::Default;
-
 }
 
 void ADragonPlayerController::BeginPlay()
@@ -40,4 +41,30 @@ void ADragonPlayerController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 	}
+}
+
+void ADragonPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	FVector2D MousePosition;
+	GetMousePosition(MousePosition.X, MousePosition.Y);
+	FHitResult HitResult;
+	GetHitResultAtScreenPosition(MousePosition, ECC_Camera, true, HitResult);
+	if (HitResult.bBlockingHit && HitResult.GetActor())
+		UE_LOG(LogTemp, Display, TEXT("Name: %s, Location: %s"), *HitResult.GetActor()->GetName(), *HitResult.Location.ToString());
+	AActor* Actor = HitResult.GetActor();
+	IHighlightInterface* HighlightActor = Cast<IHighlightInterface>(Actor);
+	if (HighlightActor)
+	{
+		HighlightActor->HighlightActor();
+	}
+	if (Actor != LastHitActor)
+	{
+		IHighlightInterface* LastHighlightActor = Cast<IHighlightInterface>(LastHitActor);
+		if (LastHighlightActor)
+			LastHighlightActor->UnHighlightActor();
+
+	}
+
+	LastHitActor = Actor;
 }

@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Interfaces/HighlightInterface.h"
 #include "DragonPlayerController.generated.h"
 
 
 class UDataAsset_InputConfig;
 struct FInputActionValue;
+
 /**
  * 
  */
@@ -21,8 +23,11 @@ public:
 	ADragonPlayerController(const FObjectInitializer& ObjectInitializer);
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+	virtual void Tick(float DeltaTime) override;
 
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input Data", meta = (AllowPrivateAccess = "true"))
 	UDataAsset_InputConfig* InputConfigDataAsset;
+
+	AActor* LastHitActor;
 };

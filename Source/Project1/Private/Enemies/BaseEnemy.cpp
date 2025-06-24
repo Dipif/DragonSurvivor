@@ -24,7 +24,7 @@ void ABaseEnemy::BeginPlay()
 
 void ABaseEnemy::HighlightActor()
 {
-	if (SkeletalMeshComp && SkeletalMeshComp->SkeletalMesh)
+	if (SkeletalMeshComp && SkeletalMeshComp->GetSkeletalMeshAsset())
 	{
 		SkeletalMeshComp->SetRenderCustomDepth(true);
 		SkeletalMeshComp->SetCustomDepthStencilValue(0);
@@ -37,7 +37,7 @@ void ABaseEnemy::HighlightActor()
 
 void ABaseEnemy::UnHighlightActor()
 {
-	if (SkeletalMeshComp && SkeletalMeshComp->SkeletalMesh)
+	if (SkeletalMeshComp && SkeletalMeshComp->GetSkeletalMeshAsset())
 	{
 		SkeletalMeshComp->SetRenderCustomDepth(false);
 	}
