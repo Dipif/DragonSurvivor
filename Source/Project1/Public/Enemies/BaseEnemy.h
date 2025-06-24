@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BasePawn.h"
 #include "Character/CharacterBase.h"
+#include "Interfaces/HighlightInterface.h"
 #include "BaseEnemy.generated.h"
 
 class UCapsuleComponent;
@@ -12,7 +13,7 @@ class UCapsuleComponent;
  * 
  */
 UCLASS(Blueprintable)
-class PROJECT1_API ABaseEnemy : public ABasePawn
+class PROJECT1_API ABaseEnemy : public ABasePawn, public IHighlightInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +22,9 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void HighlightActor() override;
+	virtual void UnHighlightActor() override;
+
 	UCapsuleComponent* GetCapsuleCollision() const { return CapsuleCollision; }
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -28,4 +32,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ACharacterBase* TargetCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USkeletalMeshComponent* SkeletalMeshComp;
 };

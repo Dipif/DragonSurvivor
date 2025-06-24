@@ -21,5 +21,5 @@ void UDragonAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 		return;
 	}
 	CurrentSpeed = OwningDragonCharacter->GetVelocity().Size2D();
-	bHasAcceleration = OwningMovementComponent->GetCurrentAcceleration().SizeSquared() > 0.0f;
+	bHasAcceleration = OwningMovementComponent->GetCurrentAcceleration().Size2D() > 0.0f;
 }

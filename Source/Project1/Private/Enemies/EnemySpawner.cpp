@@ -22,7 +22,7 @@ AEnemySpawner::AEnemySpawner()
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &AEnemySpawner::SpawnEnemy, SpawnInterval, true);
+	GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &AEnemySpawner::SpawnEnemy, SpawnInterval, false);
 }
 
 // Called every frame
@@ -35,18 +35,15 @@ void AEnemySpawner::SpawnEnemy()
 {
 	UE_LOG(LogTemp, Display, TEXT("Spawning enemy..."));
 	FVector SpawnLocation = FMath::RandPointInBox(SpawnArea);
+	SpawnLocation.Z = 1000.0f;
 	ABaseEnemy* SpawnedEnemy = GetWorld()->SpawnActor<ABaseEnemy>(EnemyClass, SpawnLocation, FRotator::ZeroRotator);
+	if (!SpawnedEnemy)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to spawn enemy of class %s"), *EnemyClass->GetName());
+		return;
+	}
 	float SpawnHeight = SpawnedEnemy->GetCapsuleCollision()->GetScaledCapsuleHalfHeight();
-	SpawnedEnemy->SetActorLocation(FVector(SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z + SpawnHeight));
+	SpawnedEnemy->SetActorLocation(FVector(SpawnLocation.X, SpawnLocation.Y, SpawnHeight));
 	SpawnedEnemies.Add(SpawnedEnemy);
 
-	if (SpawnedEnemy)
-	{
-		AAIController* AIController = Cast<AAIController>(SpawnedEnemy->GetController());
-		if (!AIController)
-		{
-			AIController = GetWorld()->SpawnActor<AAIController>(AAIController::StaticClass(), SpawnLocation, FRotator::ZeroRotator);
-			AIController->Possess(SpawnedEnemy);
-		}
-	}
 }

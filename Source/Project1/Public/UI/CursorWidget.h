@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/CharacterBase.h"
-#include "Dragon.generated.h"
+#include "Blueprint/UserWidget.h"
+#include "CursorWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECT1_API ADragon : public ACharacterBase
+class PROJECT1_API UCursorWidget : public UUserWidget
 {
 	GENERATED_BODY()
+	
 };

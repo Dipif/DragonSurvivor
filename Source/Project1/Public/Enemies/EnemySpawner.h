@@ -7,6 +7,8 @@
 #include "Enemies/BaseEnemy.h"
 #include "EnemySpawner.generated.h"
 
+class UFloatingPawnMovement;
+
 UCLASS()
 class PROJECT1_API AEnemySpawner : public AActor
 {
@@ -37,4 +39,5 @@ private:
 	void SpawnEnemy();
 	FTimerHandle SpawnTimerHandle;
 	TArray<AActor*> SpawnedEnemies;
+
 };

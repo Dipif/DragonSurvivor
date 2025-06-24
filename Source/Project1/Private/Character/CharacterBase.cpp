@@ -4,12 +4,22 @@
 #include "Character/CharacterBase.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "DataAsset_InputConfig.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "Character/DragonPlayerController.h"
+#include "Blueprint/UserWidget.h"
+
 
 // Sets default values
 ACharacterBase::ACharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	MovementSpeed = 10.f;
+	RotationSpeed = 60.f;
+	DestinationLocation = FVector::ZeroVector; // Initialize destination to zero vector
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
@@ -31,13 +41,15 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	MoveTo(DestinationLocation); // Move towards the destination location
+	MoveTo(DestinationLocation, DeltaTime); // Move towards the destination location
 }
 
 // Called to bind functionality to input
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
 }
 
@@ -47,14 +59,14 @@ void ACharacterBase::UpdateDestination(const FVector& NewDestination)
 }
 
 
-void ACharacterBase::MoveTo(const FVector& Destination)
+void ACharacterBase::MoveTo(const FVector& Destination, float DeltaTime)
 {
 	if (GetController() && GetController()->GetPawn())
 	{
 		FVector Direction = (DestinationLocation - GetActorLocation()).GetSafeNormal();
 		Direction.Z = 0; // Ensure movement is horizontal
 		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
-		AddMovementInput(Direction, 1.0f);
+		AddMovementInput(Direction, MovementSpeed * DeltaTime);
 	}
 }
 

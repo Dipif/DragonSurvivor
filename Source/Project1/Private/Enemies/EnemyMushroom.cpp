@@ -6,16 +6,15 @@
 AEnemyMushroom::AEnemyMushroom()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	MovementSpeed = 0.5f;
+	MovementSpeed = 10.f;
 	DestinationLocation = FVector::ZeroVector;
-
 }
 
 
 void AEnemyMushroom::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	MoveTo(TargetCharacter->GetActorLocation());
+	MoveTo(TargetCharacter->GetActorLocation(), DeltaTime);
 }
 
 void AEnemyMushroom::BeginPlay()
@@ -24,7 +23,7 @@ void AEnemyMushroom::BeginPlay()
 	DestinationLocation = GetActorLocation();
 }
 
-void AEnemyMushroom::MoveTo(const FVector& Destination)
+void AEnemyMushroom::MoveTo(const FVector& Destination, float DeltaTime)
 {
 	DestinationLocation = Destination;
 	if (GetController() && GetController()->GetPawn())
@@ -32,6 +31,6 @@ void AEnemyMushroom::MoveTo(const FVector& Destination)
 		FVector Direction = (DestinationLocation - GetActorLocation()).GetSafeNormal();
 		Direction.Z = 0; // Ensure movement is horizontal
 		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
-		AddMovementInput(Direction, 0.5f);
+		AddMovementInput(Direction, MovementSpeed * DeltaTime);
 	}
 }

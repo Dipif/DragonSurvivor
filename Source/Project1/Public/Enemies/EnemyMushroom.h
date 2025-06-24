@@ -27,6 +27,6 @@ protected:
 	float MovementSpeed;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void MoveTo(const FVector& Destination);
+	virtual void MoveTo(const FVector& Destination, float DeltaTime);
 
 };

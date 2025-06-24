@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
+class UDataAsset_InputConfig;
+struct FInputActionValue;
 UCLASS()
 class PROJECT1_API ACharacterBase : public ACharacter
 {
@@ -27,10 +29,10 @@ protected:
 	FVector DestinationLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
-	float MovementSpeed = 1.0f;
+	float MovementSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
-	float RotationSpeed = 5.0f;
+	float RotationSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cameara")
 	class USpringArmComponent* SpringArmComponent;
@@ -42,5 +44,9 @@ protected:
 	virtual void UpdateDestination(const FVector& Destination);
 
 private:
-	void MoveTo(const FVector& Destination);
+	void MoveTo(const FVector& Destination, float DeltaTime);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
+	UDataAsset_InputConfig* InputConfigDataAsset;
+
 };
