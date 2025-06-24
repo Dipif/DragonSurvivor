@@ -7,6 +7,26 @@
 #include "DataAsset_InputConfig.h"
 #include "Blueprint/UserWidget.h"
 
+ADragonPlayerController::ADragonPlayerController(const FObjectInitializer& ObjectInitializer)
+{
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+	CurrentMouseCursor = EMouseCursor::Default;
+
+}
+
+void ADragonPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	bShowMouseCursor = true;
+
+	FInputModeGameAndUI InputMode;
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	InputMode.SetHideCursorDuringCapture(false);
+
+	SetInputMode(InputMode);
+}
+
 void ADragonPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -19,16 +39,5 @@ void ADragonPlayerController::SetupInputComponent()
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
-		EnhancedInputComponent->BindAction(InputConfigDataAsset->MouseMoveAction, ETriggerEvent::Triggered, this, &ADragonPlayerController::MouseMove);
-	}
-}
-
-void ADragonPlayerController::MouseMove(const FInputActionValue& Value)
-{
-	// draw debug circle at the mouse position
-	FVector2D MousePosition = Value.Get<FVector2D>();
-	if (CursorWidget)
-	{
-		CursorWidget->SetPositionInViewport(MousePosition, false);
 	}
 }

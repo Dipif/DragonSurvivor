@@ -18,16 +18,11 @@ class PROJECT1_API ADragonPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	ADragonPlayerController(const FObjectInitializer& ObjectInitializer);
+	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
 private:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input Data", meta = (AllowPrivateAccess = "true"))
 	UDataAsset_InputConfig* InputConfigDataAsset;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> CursorWidgetClass;
-
-	UUserWidget* CursorWidget;
-
-	void MouseMove(const FInputActionValue& Value);
 };
