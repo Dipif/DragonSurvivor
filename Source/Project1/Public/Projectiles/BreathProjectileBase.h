@@ -7,6 +7,7 @@
 #include "BreathProjectileBase.generated.h"
 
 class UNiagaraComponent;
+class USphereComponent;
 /**
  * 
  */
@@ -19,4 +20,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraComponent* BreathEffect;
+
+	UPROPERTY(EditDefaultsOnly)
+	USphereComponent* Collision;
 };

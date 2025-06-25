@@ -7,10 +7,12 @@
 #include "Character/DragonPlayerController.h"
 #include "AnimInstances/DragonAnimInstance.h"
 #include "Projectiles/FireBreathProjectile.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ADragon::ADragon()
 {
 	BreathSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("BreathSpawnPoint"));
+	BreathSpawnPoint->SetupAttachment(RootComponent);
 }
 
 void ADragon::ClickAttack(const FInputActionValue& Value)
@@ -34,6 +36,10 @@ void ADragon::ClickAttack(const FInputActionValue& Value)
 		UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
 		AnimInstance->SetIsAttacking(true);
 
-		ABreathProjectileBase* Breath = GetWorld()->SpawnActor<ABreathProjectileBase>(BreathProjectileClass, GetActorLocation(), GetActorRotation());
+		FVector SpawnLocation = BreathSpawnPoint->GetComponentLocation();
+		FVector SpawnDirection = (TargetLocation - SpawnLocation).GetSafeNormal();
+		UE_LOG(LogTemp, Warning, TEXT("Rotation: %s"), *SpawnDirection.Rotation().ToString());
+		ABreathProjectileBase* Breath = GetWorld()->SpawnActor<ABreathProjectileBase>(
+			BreathProjectileClass, SpawnLocation, SpawnDirection.Rotation());
 	}
 }
