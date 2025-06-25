@@ -18,6 +18,8 @@ class PROJECT1_API UDragonAnimInstance : public UBaseAnimInstance
 public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
+
+	void SetIsAttacking(bool IsAttacking);
 protected:
 	UPROPERTY()
 	ADragon* OwningDragonCharacter;
@@ -30,4 +32,7 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool bHasAcceleration = false;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	bool bIsAttacking = false;
 };

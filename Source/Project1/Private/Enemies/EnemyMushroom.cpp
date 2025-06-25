@@ -2,6 +2,7 @@
 
 
 #include "Enemies/EnemyMushroom.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 AEnemyMushroom::AEnemyMushroom()
 {
@@ -21,6 +22,15 @@ void AEnemyMushroom::BeginPlay()
 {
 	Super::BeginPlay();
 	DestinationLocation = GetActorLocation();
+
+	if (UFloatingPawnMovement* MovementComponent = Cast<UFloatingPawnMovement>(GetMovementComponent()))
+	{
+		MovementComponent->MaxSpeed = MovementSpeed;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Movement component is not of type UFloatingPawnMovement in ABaseEnemy::BeginPlay"));
+	}
 }
 
 void AEnemyMushroom::MoveTo(const FVector& Destination, float DeltaTime)
@@ -31,6 +41,6 @@ void AEnemyMushroom::MoveTo(const FVector& Destination, float DeltaTime)
 		FVector Direction = (DestinationLocation - GetActorLocation()).GetSafeNormal();
 		Direction.Z = 0; // Ensure movement is horizontal
 		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
-		AddMovementInput(Direction, MovementSpeed * DeltaTime);
+		AddMovementInput(Direction, 1.0f);
 	}
 }

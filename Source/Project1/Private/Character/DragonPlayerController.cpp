@@ -50,8 +50,6 @@ void ADragonPlayerController::Tick(float DeltaTime)
 	GetMousePosition(MousePosition.X, MousePosition.Y);
 	FHitResult HitResult;
 	GetHitResultAtScreenPosition(MousePosition, ECC_Camera, true, HitResult);
-	if (HitResult.bBlockingHit && HitResult.GetActor())
-		UE_LOG(LogTemp, Display, TEXT("Name: %s, Location: %s"), *HitResult.GetActor()->GetName(), *HitResult.Location.ToString());
 	AActor* Actor = HitResult.GetActor();
 	IHighlightInterface* HighlightActor = Cast<IHighlightInterface>(Actor);
 	if (HighlightActor)

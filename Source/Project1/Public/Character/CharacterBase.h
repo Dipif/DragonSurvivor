@@ -43,10 +43,15 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void UpdateDestination(const FVector& Destination);
 
+	void ClickMove(const FInputActionValue& Value);
+	virtual void ClickAttack(const FInputActionValue& Value);
+
 private:
-	void MoveTo(const FVector& Destination, float DeltaTime);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
 	UDataAsset_InputConfig* InputConfigDataAsset;
+
+
+	void MoveTo(const FVector& Destination);
 
 };

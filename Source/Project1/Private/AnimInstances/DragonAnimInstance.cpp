@@ -23,3 +23,9 @@ void UDragonAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	CurrentSpeed = OwningDragonCharacter->GetVelocity().Size2D();
 	bHasAcceleration = OwningMovementComponent->GetCurrentAcceleration().Size2D() > 0.0f;
 }
+
+void UDragonAnimInstance::SetIsAttacking(bool IsAttacking)
+{
+	UE_LOG(LogTemp, Warning, TEXT("SetIsAttacking called with value: %s"), IsAttacking ? TEXT("true") : TEXT("false"));
+	this->bIsAttacking = IsAttacking;
+}
