@@ -12,7 +12,7 @@ AEnemySpawner::AEnemySpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SpawnInterval = 1.0f; // Default spawn interval
+	SpawnInterval = 5.0f; // Default spawn interval
 	SpawnArea = FBox(FVector(-1000, -1000, 0), FVector(1000, 1000, 0)); // Default spawn area
 
 	EnemyClass = nullptr; // Default enemy class is null

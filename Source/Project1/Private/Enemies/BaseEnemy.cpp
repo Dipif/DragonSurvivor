@@ -13,6 +13,9 @@ ABaseEnemy::ABaseEnemy()
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMeshComp->SetupAttachment(RootComponent);
 	TargetCharacter = nullptr;
+
+	Health = 20.0f;
+	AttackDamage = 10.0f;
 }
 
 void ABaseEnemy::BeginPlay()
@@ -45,4 +48,15 @@ void ABaseEnemy::UnHighlightActor()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SkeletalMeshComp or SkeletalMesh is null in ABaseEnemy::UnHighlightActor"));
 	}
+}
+
+float ABaseEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	Health -= Damage; 
+	if (Health <= 0.0f)
+	{
+		Destroy();
+	}
+	return Damage;
 }

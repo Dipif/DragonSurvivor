@@ -24,6 +24,7 @@ public:
 
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
+	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	UCapsuleComponent* GetCapsuleCollision() const { return CapsuleCollision; }
 protected:
@@ -35,4 +36,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* SkeletalMeshComp;
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float Health;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float AttackDamage;
 };

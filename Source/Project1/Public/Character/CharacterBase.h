@@ -54,4 +54,5 @@ private:
 
 	void MoveTo(const FVector& Destination);
 
+	bool bCanMove = true;
 };

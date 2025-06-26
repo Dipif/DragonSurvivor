@@ -24,22 +24,27 @@ void ADragon::ClickAttack(const FInputActionValue& Value)
 		return;
 
 	ABaseEnemy* TargetEnemy = Cast<ABaseEnemy>(HitResult.GetActor());
+	FVector TargetLocation;
 	if (TargetEnemy)
 	{
-		// Rotate towards the target enemy and stop moving
-		FVector TargetLocation = TargetEnemy->GetActorLocation();
-		FVector Direction = (TargetLocation - GetActorLocation()).GetSafeNormal();
-		Direction.Z = 0;
-		SetActorRotation(Direction.Rotation());
-		UpdateDestination(GetActorLocation());
-
-		UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
-		AnimInstance->SetIsAttacking(true);
-
-		FVector SpawnLocation = BreathSpawnPoint->GetComponentLocation();
-		FVector SpawnDirection = (TargetLocation - SpawnLocation).GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("Rotation: %s"), *SpawnDirection.Rotation().ToString());
-		ABreathProjectileBase* Breath = GetWorld()->SpawnActor<ABreathProjectileBase>(
-			BreathProjectileClass, SpawnLocation, SpawnDirection.Rotation());
+		TargetLocation = TargetEnemy->GetActorLocation();
 	}
+	else
+	{
+		TargetLocation = HitResult.ImpactPoint;
+	}
+	FVector Direction = (TargetLocation - GetActorLocation()).GetSafeNormal();
+	Direction.Z = 0;
+
+	// Rotate towards the target enemy and stop moving
+	SetActorRotation(Direction.Rotation());
+	UpdateDestination(GetActorLocation());
+
+	UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->SetIsAttacking(true);
+
+	FVector SpawnLocation = BreathSpawnPoint->GetComponentLocation();
+	FVector SpawnDirection = (TargetLocation - SpawnLocation).GetSafeNormal();
+	ABreathProjectileBase* Breath = GetWorld()->SpawnActor<ABreathProjectileBase>(
+		BreathProjectileClass, SpawnLocation, SpawnDirection.Rotation());
 }

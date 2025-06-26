@@ -8,6 +8,7 @@
 
 class UNiagaraComponent;
 class USphereComponent;
+class UNiagaraSystem;
 /**
  * 
  */
@@ -17,10 +18,15 @@ class PROJECT1_API ABreathProjectileBase : public AProjectilebase
 	GENERATED_BODY()
 public:
 	ABreathProjectileBase();
+	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+	virtual void ShowHitEffect(const FHitResult& HitResult) override;
 
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraComponent* BreathEffect;
 
 	UPROPERTY(EditDefaultsOnly)
 	USphereComponent* Collision;
+
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* HitEffectClass;
 };

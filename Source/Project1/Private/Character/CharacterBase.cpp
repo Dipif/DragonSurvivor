@@ -70,16 +70,23 @@ void ACharacterBase::UpdateDestination(const FVector& NewDestination)
 
 void ACharacterBase::ClickMove(const FInputActionValue& Value)
 {
+	if (!bCanMove)
+		return;
 	FHitResult HitResult;
 	ADragonPlayerController* PlayerController = Cast<ADragonPlayerController>(GetController());
 	PlayerController->GetHitResultUnderCursor(ECC_Camera, false, HitResult);
 	if (!HitResult.bBlockingHit)
 		return;
 	UpdateDestination(HitResult.ImpactPoint);
+
+
+	UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->SetIsAttacking(false);
 }
 
 void ACharacterBase::ClickAttack(const FInputActionValue& Value)
 {
+
 }
 
 

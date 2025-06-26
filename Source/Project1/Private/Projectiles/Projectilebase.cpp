@@ -15,3 +15,7 @@ AProjectilebase::AProjectilebase()
 	ProjectileMovement->MaxSpeed = 500.f;
 	ProjectileMovement->ProjectileGravityScale = 0.f;
 }
+
+void AProjectilebase::ShowHitEffect(const FHitResult& HitResult)
+{
+}

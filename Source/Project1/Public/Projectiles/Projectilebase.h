@@ -15,6 +15,7 @@ class PROJECT1_API AProjectilebase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AProjectilebase();
+	virtual void ShowHitEffect(const FHitResult& HitResult);
 
 protected:
 
