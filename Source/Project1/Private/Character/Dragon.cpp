@@ -36,16 +36,18 @@ void ADragon::ClickAttack(const FInputActionValue& Value)
 	if (!HitResult.bBlockingHit)
 		return;
 
-	ABaseEnemy* TargetEnemy = Cast<ABaseEnemy>(HitResult.GetActor());
+	;
 	FVector TargetLocation;
-	if (TargetEnemy)
+	if (ABaseEnemy* TargetEnemy = Cast<ABaseEnemy>(HitResult.GetActor()))
 	{
 		TargetLocation = TargetEnemy->GetActorLocation();
+		CurrentTargetEnemy = TargetEnemy;
 	}
 	else
 	{
 		TargetLocation = HitResult.ImpactPoint;
 	}
+	CurrentTargetLocation = TargetLocation;
 	FVector Direction = (TargetLocation - GetActorLocation()).GetSafeNormal();
 	Direction.Z = 0;
 
@@ -56,8 +58,12 @@ void ADragon::ClickAttack(const FInputActionValue& Value)
 	UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
 	AnimInstance->SetIsAttacking(true);
 
+}
+
+void ADragon::SpawnBreath()
+{
 	FVector SpawnLocation = BreathSpawnPoint->GetComponentLocation();
-	FVector SpawnDirection = (TargetLocation - SpawnLocation).GetSafeNormal();
+	FVector SpawnDirection = (CurrentTargetLocation - SpawnLocation).GetSafeNormal();
 	ABreathProjectileBase* Breath = GetWorld()->SpawnActor<ABreathProjectileBase>(
 		BreathProjectileClass, SpawnLocation, SpawnDirection.Rotation());
 }

@@ -7,6 +7,7 @@
 #include "Dragon.generated.h"
 
 class ABreathProjectileBase;
+class ABaseEnemy;
 /**
  * 
  */
@@ -17,6 +18,9 @@ class PROJECT1_API ADragon : public ACharacterBase
 public:
 	ADragon();
 	void Tick(float DeltaTime) override;
+	void SpawnBreath();
+	float GetAttackSpeed() const { return AttackSpeed; }
+
 protected:
 	virtual void ClickAttack(const FInputActionValue& Value) override;
 
@@ -31,7 +35,6 @@ protected:
 
 private:
 	float TimeSinceLastAttack;
-
-public:
-	float GetAttackSpeed() const { return AttackSpeed; }
+	ABaseEnemy* CurrentTargetEnemy;
+	FVector CurrentTargetLocation;
 };
