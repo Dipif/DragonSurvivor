@@ -4,6 +4,7 @@
 #include "AnimInstances/DragonAnimInstance.h"
 #include "Character/Dragon.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Animation/AnimSequenceBase.h"
 
 void UDragonAnimInstance::NativeInitializeAnimation()
 {
@@ -26,6 +27,6 @@ void UDragonAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 
 void UDragonAnimInstance::SetIsAttacking(bool IsAttacking)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SetIsAttacking called with value: %s"), IsAttacking ? TEXT("true") : TEXT("false"));
+	AttackSpeed = OwningDragonCharacter->GetAttackSpeed();
 	this->bIsAttacking = IsAttacking;
 }

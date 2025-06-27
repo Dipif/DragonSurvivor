@@ -13,10 +13,23 @@ ADragon::ADragon()
 {
 	BreathSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("BreathSpawnPoint"));
 	BreathSpawnPoint->SetupAttachment(RootComponent);
+
+	AttackSpeed = 1.0f;
+	AttackDamage = 10.0f;
+	TimeSinceLastAttack = 1000.0f;
+}
+
+void ADragon::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	TimeSinceLastAttack += DeltaTime;
 }
 
 void ADragon::ClickAttack(const FInputActionValue& Value)
 {
+	if (TimeSinceLastAttack * AttackSpeed < 1.0f)
+		return;
+	TimeSinceLastAttack = 0.0f;
 	FHitResult HitResult;
 	ADragonPlayerController* PlayerController = Cast<ADragonPlayerController>(GetController());
 	PlayerController->GetHitResultUnderCursor(ECC_Camera, false, HitResult);

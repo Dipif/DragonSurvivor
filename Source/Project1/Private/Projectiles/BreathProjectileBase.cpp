@@ -19,21 +19,8 @@ ABreathProjectileBase::ABreathProjectileBase()
 	HitEffectClass = nullptr; // Initialize to nullptr
 }
 
-void ABreathProjectileBase::ShowHitEffect(const FHitResult& HitResult)
-{
-	if (HitEffectClass)
-	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffectClass, HitResult.ImpactPoint);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit effect class is not set!"));
-	}
-}
-
 void ABreathProjectileBase::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Projectile hit: %s"), *Other->GetName());
 	if (ABaseEnemy* baseEnemy = Cast<ABaseEnemy>(Other))
 	{
 		float Damage = 10.0f;
@@ -45,5 +32,17 @@ void ABreathProjectileBase::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other
 	{
 		ShowHitEffect(Hit);
 		Destroy();
+	}
+}
+
+void ABreathProjectileBase::ShowHitEffect(const FHitResult& HitResult)
+{
+	if (HitEffectClass)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffectClass, HitResult.ImpactPoint);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit effect class is not set!"));
 	}
 }

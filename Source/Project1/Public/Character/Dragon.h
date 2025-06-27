@@ -16,6 +16,7 @@ class PROJECT1_API ADragon : public ACharacterBase
 	GENERATED_BODY()
 public:
 	ADragon();
+	void Tick(float DeltaTime) override;
 protected:
 	virtual void ClickAttack(const FInputActionValue& Value) override;
 
@@ -23,4 +24,14 @@ protected:
 	USceneComponent* BreathSpawnPoint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack")
 	TSubclassOf<ABreathProjectileBase> BreathProjectileClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack")
+	float AttackSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack")
+	float AttackDamage;
+
+private:
+	float TimeSinceLastAttack;
+
+public:
+	float GetAttackSpeed() const { return AttackSpeed; }
 };

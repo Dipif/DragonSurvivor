@@ -20,6 +20,7 @@ public:
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
 
 	void SetIsAttacking(bool IsAttacking);
+
 protected:
 	UPROPERTY()
 	ADragon* OwningDragonCharacter;
@@ -27,12 +28,15 @@ protected:
 	UPROPERTY()
 	UCharacterMovementComponent* OwningMovementComponent;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	float CurrentSpeed = 0.0f;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool bHasAcceleration = false;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool bIsAttacking = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	float AttackSpeed = 0.0f;
 };
