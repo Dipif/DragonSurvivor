@@ -28,17 +28,11 @@ void AEnemyMushroom::BeginPlay()
 	}
 }
 
-void AEnemyMushroom::Tick(float DeltaTime)
+void AEnemyMushroom::Attack()
 {
-	Super::Tick(DeltaTime);
-	TimeSinceLastAttack += DeltaTime;
-}
-
-void AEnemyMushroom::Attack(ACharacterBase* CharacterBase)
-{
-	UE_LOG(LogTemp, Warning, TEXT("AEnemyMushroom::Attack called"));
 	if (TimeSinceLastAttack * AttackSpeed < 1.0f)
 		return;
+	bIsMovable = false;
 	TimeSinceLastAttack -= 1 / AttackSpeed;
 
 	FVector TargetLocation = TargetCharacter->GetActorLocation();

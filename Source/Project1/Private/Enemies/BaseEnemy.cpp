@@ -4,6 +4,7 @@
 #include "Enemies/BaseEnemy.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/SkeletalMesh.h"
+#include "AnimInstances/EnemyAnimInstance.h"
 
 
 ABaseEnemy::ABaseEnemy()
@@ -19,6 +20,8 @@ ABaseEnemy::ABaseEnemy()
 	AttackRange = 100.0f;
 	AttackSpeed = 1.0f;
 	MovementSpeed = 10.f;
+
+	bIsMovable = true;
 }
 
 void ABaseEnemy::BeginPlay()
@@ -34,8 +37,7 @@ void ABaseEnemy::Tick(float DeltaTime)
 	TimeSinceLastAttack += DeltaTime;
 	if (FVector::Dist2D(TargetCharacter->GetActorLocation(), GetActorLocation()) < AttackRange)
 	{
-		Attack(TargetCharacter);
-		return;
+		Attack();
 	}
 	MoveTo(TargetCharacter->GetActorLocation(), DeltaTime);
 }
@@ -76,8 +78,21 @@ float ABaseEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 	return Damage;
 }
 
+void ABaseEnemy::Attack()
+{
+}
+
+void ABaseEnemy::AttackEnd()
+{
+	bIsMovable = true;
+	UEnemyAnimInstance* AnimInstance = Cast<UEnemyAnimInstance>(SkeletalMeshComp->GetAnimInstance());
+	AnimInstance->SetIsAttacking(false);
+}
+
 void ABaseEnemy::MoveTo(const FVector& Destination, float DeltaTime)
 {
+	if (!bIsMovable)
+		return;
 	DestinationLocation = Destination;
 	if (GetController() && GetController()->GetPawn())
 	{
@@ -86,9 +101,4 @@ void ABaseEnemy::MoveTo(const FVector& Destination, float DeltaTime)
 		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
 		AddMovementInput(Direction, 1.0f);
 	}
-}
-
-void ABaseEnemy::Attack(ACharacterBase* CharacterBase)
-{
-	UE_LOG(LogTemp, Warning, TEXT("BaseEnemy Attack called"));
 }

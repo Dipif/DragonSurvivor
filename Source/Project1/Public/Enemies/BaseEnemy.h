@@ -6,6 +6,7 @@
 #include "BasePawn.h"
 #include "Character/CharacterBase.h"
 #include "Interfaces/HighlightInterface.h"
+#include "Interfaces/Attackable.h"
 #include "BaseEnemy.generated.h"
 
 class UCapsuleComponent;
@@ -13,7 +14,7 @@ class UCapsuleComponent;
  * 
  */
 UCLASS(Blueprintable)
-class PROJECT1_API ABaseEnemy : public ABasePawn, public IHighlightInterface
+class PROJECT1_API ABaseEnemy : public ABasePawn, public IHighlightInterface, public IAttackable
 {
 	GENERATED_BODY()
 
@@ -27,11 +28,14 @@ public:
 	virtual void UnHighlightActor() override;
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	// IAttackable implementation
+	virtual void Attack() override;
+	virtual void AttackEnd() override;
+	// IAttackable implementation end
 
 	UCapsuleComponent* GetCapsuleCollision() const { return CapsuleCollision; }
 protected:
 	virtual void MoveTo(const FVector& Destination, float DeltaTime);
-	virtual void Attack(ACharacterBase* CharacterBase);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleCollision;
 
@@ -57,4 +61,6 @@ protected:
 
 
 	float TimeSinceLastAttack;
+
+	bool bIsMovable;
 };

@@ -29,6 +29,19 @@ void ADragon::Tick(float DeltaTime)
 
 void ADragon::ClickAttack(const FInputActionValue& Value)
 {
+	Attack();
+}
+
+void ADragon::SpawnBreath()
+{
+	FVector SpawnLocation = BreathSpawnPoint->GetComponentLocation();
+	FVector SpawnDirection = (CurrentTargetLocation - SpawnLocation).GetSafeNormal();
+	ABreathProjectileBase* Breath = GetWorld()->SpawnActor<ABreathProjectileBase>(
+		BreathProjectileClass, SpawnLocation, SpawnDirection.Rotation());
+}
+
+void ADragon::Attack()
+{
 	if (TimeSinceLastAttack * AttackSpeed < 1.0f)
 		return;
 	TimeSinceLastAttack -= 1 / AttackSpeed;
@@ -59,13 +72,10 @@ void ADragon::ClickAttack(const FInputActionValue& Value)
 	UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
 	AnimInstance->SetIsAttacking(true);
 	AnimInstance->SetAttackSpeed(AttackSpeed);
-
 }
 
-void ADragon::SpawnBreath()
+void ADragon::AttackEnd()
 {
-	FVector SpawnLocation = BreathSpawnPoint->GetComponentLocation();
-	FVector SpawnDirection = (CurrentTargetLocation - SpawnLocation).GetSafeNormal();
-	ABreathProjectileBase* Breath = GetWorld()->SpawnActor<ABreathProjectileBase>(
-		BreathProjectileClass, SpawnLocation, SpawnDirection.Rotation());
+	UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
+	AnimInstance->SetIsAttacking(false);
 }

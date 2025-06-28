@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/CharacterBase.h"
+#include "Interfaces/Attackable.h"
 #include "Dragon.generated.h"
 
 class ABreathProjectileBase;
@@ -12,7 +13,7 @@ class ABaseEnemy;
  * 
  */
 UCLASS()
-class PROJECT1_API ADragon : public ACharacterBase
+class PROJECT1_API ADragon : public ACharacterBase, public IAttackable
 {
 	GENERATED_BODY()
 public:
@@ -20,6 +21,11 @@ public:
 	void Tick(float DeltaTime) override;
 	void SpawnBreath();
 	float GetAttackSpeed() const { return AttackSpeed; }
+
+	// IAttackable implementation
+	virtual void Attack() override;
+	virtual void AttackEnd() override;
+	// IAttackable implementation end
 
 protected:
 	virtual void ClickAttack(const FInputActionValue& Value) override;

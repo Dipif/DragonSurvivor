@@ -18,11 +18,10 @@ public:
 	AEnemyMushroom();
 
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 
+	// IAttackable implementation
+	virtual void Attack() override;
+	// IAttackable implementation end
 protected:
-
-
-	virtual void Attack(ACharacterBase* CharacterBase) override;
 
 };

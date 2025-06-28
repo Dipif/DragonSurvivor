@@ -2,17 +2,13 @@
 
 
 #include "AnimNotifies/AnimNotify_AttackEnded.h"
-#include "Character/CharacterBase.h"
-#include "AnimInstances/DragonAnimInstance.h"
+#include "Interfaces/Attackable.h"
 
 void UAnimNotify_AttackEnded::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Attack ended notify triggered."));
-	if (ACharacterBase* Character = Cast<ACharacterBase>(MeshComp->GetOwner()))
+	if (IAttackable* Attackable = Cast<IAttackable>(MeshComp->GetOwner()))
 	{
-		if (UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(MeshComp->GetAnimInstance()))
-		{
-			AnimInstance->SetIsAttacking(false);  // 공격 끝났다고 알림
-		}
+		Attackable->AttackEnd();
 	}
 }
