@@ -19,6 +19,9 @@ class PROJECT1_API UEnemyAnimInstance : public UBaseAnimInstance
 public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
+
+	void SetIsAttacking(bool IsAttacking);
+	void SetAttackSpeed(float OtherAttackSpeed);
 protected:
 	UPROPERTY()
 	ABaseEnemy* OwningEnemy;
@@ -28,4 +31,10 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	float CurrentSpeed = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	bool bIsAttacking = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
+	float AttackSpeed = 0.0f;
 };

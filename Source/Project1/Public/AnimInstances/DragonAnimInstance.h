@@ -20,6 +20,7 @@ public:
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
 
 	void SetIsAttacking(bool IsAttacking);
+	void SetAttackSpeed(float OtherAttackSpeed);
 
 protected:
 	UPROPERTY()

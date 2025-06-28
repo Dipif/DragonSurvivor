@@ -21,13 +21,17 @@ public:
 	ABaseEnemy();
 
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+
 	UCapsuleComponent* GetCapsuleCollision() const { return CapsuleCollision; }
 protected:
+	virtual void MoveTo(const FVector& Destination, float DeltaTime);
+	virtual void Attack(ACharacterBase* CharacterBase);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleCollision;
 
@@ -37,9 +41,20 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* SkeletalMeshComp;
 
-private:
+	FVector DestinationLocation;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float Health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float AttackDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float AttackRange;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+	float MovementSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+	float AttackSpeed;
+
+
+	float TimeSinceLastAttack;
 };

@@ -3,20 +3,15 @@
 
 #include "Enemies/EnemyMushroom.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "AnimInstances/EnemyMushroomAnimInstance.h"
 
 AEnemyMushroom::AEnemyMushroom()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	MovementSpeed = 10.f;
 	DestinationLocation = FVector::ZeroVector;
+	TimeSinceLastAttack = 1.0f;
 }
 
-
-void AEnemyMushroom::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	MoveTo(TargetCharacter->GetActorLocation(), DeltaTime);
-}
 
 void AEnemyMushroom::BeginPlay()
 {
@@ -33,14 +28,25 @@ void AEnemyMushroom::BeginPlay()
 	}
 }
 
-void AEnemyMushroom::MoveTo(const FVector& Destination, float DeltaTime)
+void AEnemyMushroom::Tick(float DeltaTime)
 {
-	DestinationLocation = Destination;
-	if (GetController() && GetController()->GetPawn())
-	{
-		FVector Direction = (DestinationLocation - GetActorLocation()).GetSafeNormal();
-		Direction.Z = 0; // Ensure movement is horizontal
-		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
-		AddMovementInput(Direction, 1.0f);
-	}
+	Super::Tick(DeltaTime);
+	TimeSinceLastAttack += DeltaTime;
+}
+
+void AEnemyMushroom::Attack(ACharacterBase* CharacterBase)
+{
+	UE_LOG(LogTemp, Warning, TEXT("AEnemyMushroom::Attack called"));
+	if (TimeSinceLastAttack * AttackSpeed < 1.0f)
+		return;
+	TimeSinceLastAttack -= 1 / AttackSpeed;
+
+	FVector TargetLocation = TargetCharacter->GetActorLocation();
+	FVector Direction = (TargetLocation - GetActorLocation()).GetSafeNormal();
+	Direction.Z = 0;
+	SetActorRotation(Direction.Rotation());
+
+	UEnemyAnimInstance* AnimInstance = Cast<UEnemyAnimInstance>(SkeletalMeshComp->GetAnimInstance());
+	AnimInstance->SetIsAttacking(true);
+	AnimInstance->SetAttackSpeed(AttackSpeed);
 }

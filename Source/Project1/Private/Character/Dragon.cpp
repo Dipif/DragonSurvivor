@@ -17,6 +17,8 @@ ADragon::ADragon()
 	AttackSpeed = 1.0f;
 	AttackDamage = 10.0f;
 	TimeSinceLastAttack = 1000.0f;
+	CurrentTargetEnemy = nullptr;
+	CurrentTargetLocation = FVector::ZeroVector;
 }
 
 void ADragon::Tick(float DeltaTime)
@@ -29,14 +31,13 @@ void ADragon::ClickAttack(const FInputActionValue& Value)
 {
 	if (TimeSinceLastAttack * AttackSpeed < 1.0f)
 		return;
-	TimeSinceLastAttack = 0.0f;
+	TimeSinceLastAttack -= 1 / AttackSpeed;
 	FHitResult HitResult;
 	ADragonPlayerController* PlayerController = Cast<ADragonPlayerController>(GetController());
 	PlayerController->GetHitResultUnderCursor(ECC_Camera, false, HitResult);
 	if (!HitResult.bBlockingHit)
 		return;
 
-	;
 	FVector TargetLocation;
 	if (ABaseEnemy* TargetEnemy = Cast<ABaseEnemy>(HitResult.GetActor()))
 	{
@@ -57,6 +58,7 @@ void ADragon::ClickAttack(const FInputActionValue& Value)
 
 	UDragonAnimInstance* AnimInstance = Cast<UDragonAnimInstance>(GetMesh()->GetAnimInstance());
 	AnimInstance->SetIsAttacking(true);
+	AnimInstance->SetAttackSpeed(AttackSpeed);
 
 }
 

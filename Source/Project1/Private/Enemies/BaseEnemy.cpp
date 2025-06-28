@@ -16,6 +16,9 @@ ABaseEnemy::ABaseEnemy()
 
 	Health = 20.0f;
 	AttackDamage = 10.0f;
+	AttackRange = 100.0f;
+	AttackSpeed = 1.0f;
+	MovementSpeed = 10.f;
 }
 
 void ABaseEnemy::BeginPlay()
@@ -23,6 +26,18 @@ void ABaseEnemy::BeginPlay()
 	Super::BeginPlay();
 	
 	TargetCharacter = Cast<ACharacterBase>(GetWorld()->GetFirstPlayerController()->GetPawn());
+}
+
+void ABaseEnemy::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	TimeSinceLastAttack += DeltaTime;
+	if (FVector::Dist2D(TargetCharacter->GetActorLocation(), GetActorLocation()) < AttackRange)
+	{
+		Attack(TargetCharacter);
+		return;
+	}
+	MoveTo(TargetCharacter->GetActorLocation(), DeltaTime);
 }
 
 void ABaseEnemy::HighlightActor()
@@ -59,4 +74,21 @@ float ABaseEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 		Destroy();
 	}
 	return Damage;
+}
+
+void ABaseEnemy::MoveTo(const FVector& Destination, float DeltaTime)
+{
+	DestinationLocation = Destination;
+	if (GetController() && GetController()->GetPawn())
+	{
+		FVector Direction = (DestinationLocation - GetActorLocation()).GetSafeNormal();
+		Direction.Z = 0; // Ensure movement is horizontal
+		SetActorRotation(Direction.Rotation()); // Rotate towards the direction of movement
+		AddMovementInput(Direction, 1.0f);
+	}
+}
+
+void ABaseEnemy::Attack(ACharacterBase* CharacterBase)
+{
+	UE_LOG(LogTemp, Warning, TEXT("BaseEnemy Attack called"));
 }

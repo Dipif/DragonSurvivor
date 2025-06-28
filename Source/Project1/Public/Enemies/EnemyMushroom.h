@@ -17,16 +17,12 @@ class PROJECT1_API AEnemyMushroom : public ABaseEnemy
 public:
 	AEnemyMushroom();
 
-	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 
-	FVector DestinationLocation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
-	float MovementSpeed;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void MoveTo(const FVector& Destination, float DeltaTime);
+	virtual void Attack(ACharacterBase* CharacterBase) override;
 
 };

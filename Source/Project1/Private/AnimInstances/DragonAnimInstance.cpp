@@ -27,6 +27,10 @@ void UDragonAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 
 void UDragonAnimInstance::SetIsAttacking(bool IsAttacking)
 {
-	AttackSpeed = OwningDragonCharacter->GetAttackSpeed();
-	this->bIsAttacking = IsAttacking;
+	bIsAttacking = IsAttacking;
+}
+
+void UDragonAnimInstance::SetAttackSpeed(float OtherAttackSpeed)
+{
+	AttackSpeed = OtherAttackSpeed;
 }

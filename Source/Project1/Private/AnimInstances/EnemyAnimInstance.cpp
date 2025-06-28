@@ -30,3 +30,12 @@ void UEnemyAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	}
 	CurrentSpeed = OwningEnemy->GetVelocity().Size2D();
 }
+void UEnemyAnimInstance::SetIsAttacking(bool IsAttacking)
+{
+	this->bIsAttacking = IsAttacking;
+}
+
+void UEnemyAnimInstance::SetAttackSpeed(float OtherAttackSpeed)
+{
+	AttackSpeed = OtherAttackSpeed;
+}
