@@ -4,8 +4,10 @@
 #include "Enemies/BaseEnemy.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/SkeletalMesh.h"
-#include "AnimInstances/EnemyAnimInstance.h"
 
+#include "AnimInstances/EnemyAnimInstance.h"
+#include "Abilities/DraAbilitySystemComponent.h"
+#include "Abilities/Attributes/DraHealthAttributeSet.h"
 
 ABaseEnemy::ABaseEnemy()
 {
@@ -15,13 +17,16 @@ ABaseEnemy::ABaseEnemy()
 	SkeletalMeshComp->SetupAttachment(RootComponent);
 	TargetCharacter = nullptr;
 
-	Health = 20.0f;
 	AttackDamage = 10.0f;
 	AttackRange = 100.0f;
 	AttackSpeed = 1.0f;
 	MovementSpeed = 10.f;
 
 	bIsMovable = true;
+
+	AbilitySystemComp = CreateDefaultSubobject<UDraAbilitySystemComponent>(TEXT("UDraAbilitySystemComp"));
+	HealthAttributeSet = CreateDefaultSubobject<UDraHealthAttributeSet>(TEXT("HealthAttributeSet"));
+	GE_Damage = nullptr;
 }
 
 void ABaseEnemy::BeginPlay()
@@ -67,16 +72,6 @@ void ABaseEnemy::UnHighlightActor()
 	}
 }
 
-float ABaseEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-	Health -= Damage; 
-	if (Health <= 0.0f)
-	{
-		Destroy();
-	}
-	return Damage;
-}
 
 void ABaseEnemy::Attack()
 {
@@ -87,6 +82,11 @@ void ABaseEnemy::AttackEnd()
 	bIsMovable = true;
 	UEnemyAnimInstance* AnimInstance = Cast<UEnemyAnimInstance>(SkeletalMeshComp->GetAnimInstance());
 	AnimInstance->SetIsAttacking(false);
+}
+
+UAbilitySystemComponent* ABaseEnemy::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComp;
 }
 
 void ABaseEnemy::MoveTo(const FVector& Destination, float DeltaTime)

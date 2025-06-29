@@ -4,12 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
 #include "CharacterBase.generated.h"
 
 class UDataAsset_InputConfig;
 struct FInputActionValue;
+class UDraAbilitySystemComponent;
+class UDraHealthAttributeSet;
+class UGameplayEffect;
+
 UCLASS()
-class DRAGONSURVIVOR_API ACharacterBase : public ACharacter
+class DRAGONSURVIVOR_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +26,17 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
+	TObjectPtr<UDraAbilitySystemComponent> AbilitySystemComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
+	TObjectPtr<UDraHealthAttributeSet> HealthAttributeSet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
+	TSubclassOf<UGameplayEffect> GE_Damage;
 
 protected:
 	// Called when the game starts or when spawned

@@ -15,7 +15,10 @@ public class DragonSurvivor : ModuleRules
 			"InputCore", 
 			"EnhancedInput", 
 			"AIModule",
-            "Niagara"
+            "Niagara",
+            "GameplayAbilities", 
+			"GameplayTags", 
+			"GameplayTasks"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

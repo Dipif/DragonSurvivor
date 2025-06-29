@@ -14,7 +14,7 @@ class UCapsuleComponent;
  * 
  */
 UCLASS(Blueprintable)
-class DRAGONSURVIVOR_API ABaseEnemy : public ABasePawn, public IHighlightInterface, public IAttackable
+class DRAGONSURVIVOR_API ABaseEnemy : public ABasePawn, public IHighlightInterface, public IAttackable, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -26,7 +26,6 @@ public:
 
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
-	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	// IAttackable implementation
 	virtual void Attack() override;
@@ -34,6 +33,19 @@ public:
 	// IAttackable implementation end
 
 	UCapsuleComponent* GetCapsuleCollision() const { return CapsuleCollision; }
+
+
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
+	TObjectPtr<UDraAbilitySystemComponent> AbilitySystemComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
+	TObjectPtr<UDraHealthAttributeSet> HealthAttributeSet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
+	TSubclassOf<UGameplayEffect> GE_Damage;
+
 protected:
 	virtual void MoveTo(const FVector& Destination, float DeltaTime);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -48,8 +60,6 @@ protected:
 	FVector DestinationLocation;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	float Health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float AttackDamage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

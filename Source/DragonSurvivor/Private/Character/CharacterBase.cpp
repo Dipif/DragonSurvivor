@@ -8,11 +8,14 @@
 #include "Blueprint/UserWidget.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameplayEffect.h"
 
 #include "DataAsset_InputConfig.h"
 #include "Character/DragonPlayerController.h"
 #include "Enemies/BaseEnemy.h"
 #include "AnimInstances/DragonAnimInstance.h"
+#include "Abilities/DraAbilitySystemComponent.h"
+#include "Abilities/Attributes/DraHealthAttributeSet.h"
 
 
 // Sets default values
@@ -33,6 +36,10 @@ ACharacterBase::ACharacterBase()
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;
 
+	AbilitySystemComp = CreateDefaultSubobject<UDraAbilitySystemComponent>(TEXT("UDraAbilitySystemComp"));
+	HealthAttributeSet = CreateDefaultSubobject<UDraHealthAttributeSet>(TEXT("HealthAttributeSet"));
+	GE_Damage = nullptr;
+
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 }
@@ -44,6 +51,7 @@ void ACharacterBase::BeginPlay()
 	DestinationLocation = GetActorLocation(); // Initialize destination to current location
 
 	GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
+	AbilitySystemComp->InitAbilityActorInfo(this, this);
 }
 
 // Called every frame
@@ -61,6 +69,11 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	EnhancedInputComponent->BindAction(InputConfigDataAsset->ClickMoveAction, ETriggerEvent::Triggered, this, &ACharacterBase::ClickMove);
 	EnhancedInputComponent->BindAction(InputConfigDataAsset->ClickAttackAction, ETriggerEvent::Triggered, this, &ACharacterBase::ClickAttack);
+}
+
+UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComp;
 }
 
 void ACharacterBase::UpdateDestination(const FVector& NewDestination)

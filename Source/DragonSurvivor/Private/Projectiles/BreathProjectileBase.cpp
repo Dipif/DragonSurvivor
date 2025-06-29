@@ -7,6 +7,7 @@
 #include "Enemies/BaseEnemy.h"
 #include "Engine/DamageEvents.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AbilitySystemComponent.h"
 
 ABreathProjectileBase::ABreathProjectileBase()
 {
@@ -21,10 +22,21 @@ ABreathProjectileBase::ABreathProjectileBase()
 
 void ABreathProjectileBase::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (ABaseEnemy* baseEnemy = Cast<ABaseEnemy>(Other))
+	if (ABaseEnemy* BaseEnemy = Cast<ABaseEnemy>(Other))
 	{
-		float Damage = 10.0f;
-		baseEnemy->TakeDamage(Damage, FDamageEvent(), nullptr, this);
+		if (UAbilitySystemComponent* ASC = BaseEnemy->GetAbilitySystemComponent())
+		{
+			FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
+			EffectContext.AddSourceObject(this);
+
+			FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(BaseEnemy->GE_Damage, 1.0f, EffectContext);
+			if (SpecHandle.IsValid())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Applying damage to %s"), *BaseEnemy->GetName());
+				ASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
+		ShowHitEffect(Hit);
 		ShowHitEffect(Hit);
 		Destroy();
 	}
